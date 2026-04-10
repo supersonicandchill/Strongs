@@ -9,589 +9,719 @@
 <meta name="theme-color" content="#1c1008">
 <title>Strongs Bible</title>
 <link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Cinzel:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#1c1008;font-family:'Lora',Georgia,serif;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100dvh;background:#f5ead6}
+#topnav{display:flex;align-items:center;background:#2a1f0e;border-bottom:2px solid #d4aa50;height:52px;padding:0 6px;gap:2px;flex-shrink:0;padding-top:env(safe-area-inset-top,0)}
+.nb{min-width:44px;height:44px;border:none;background:transparent;color:#a89070;cursor:pointer;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 10px}
+.nb:active{background:rgba(255,255,255,.1);color:#d4aa50}
+.nb svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round}
+#navtitle{flex:1;text-align:center;font-size:13px;letter-spacing:.1em;color:#d4aa50;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase;font-family:'Lora',serif}
+#toolbar{display:flex;align-items:center;padding:0 14px;background:#ede0c4;height:40px;flex-shrink:0;border-bottom:1px solid #e4d4b0;gap:8px}
+.tlbl{font-size:11px;letter-spacing:.06em;margin-right:4px}
+.tg{position:relative;width:36px;height:20px;flex-shrink:0;display:inline-block}
+.tg input{opacity:0;width:0;height:0;position:absolute}
+.tgs{position:absolute;inset:0;background:#e4d4b0;border-radius:20px;transition:.2s;cursor:pointer;border:1.5px solid #d9c89e}
+.tgs:before{content:'';position:absolute;width:14px;height:14px;left:2px;top:1px;background:#7a6040;border-radius:50%;transition:.2s}
+input:checked+.tgs{border-color:currentColor}
+#tH:checked+.tgs{background:#9b4400;border-color:#9b4400}
+#tG:checked+.tgs{background:#1a4a7a;border-color:#1a4a7a}
+#tN:checked+.tgs{background:#d4aa50;border-color:#d4aa50}
+input:checked+.tgs:before{transform:translateX(16px);background:#fff}
+.tsep{width:1px;height:18px;background:#e4d4b0;margin:0 8px}
+.fzw{display:flex;gap:4px;margin-left:auto}
+.fzb{width:30px;height:28px;border:1.5px solid #e4d4b0;background:#f5ead6;color:#7a6040;border-radius:6px;cursor:pointer;font-size:12px}
+.fzb:active{border-color:#d4aa50;color:#d4aa50}
+#main{flex:1;overflow:hidden;position:relative}
+.view{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#f5ead6;display:none}
+.view.active{display:block}
+#tabbar{display:flex;background:#2a1f0e;border-top:2px solid #d4aa50;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom,0)}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0 7px;border:none;background:transparent;color:rgba(255,255,255,.3);cursor:pointer;font-size:9px;letter-spacing:.09em;text-transform:uppercase;font-family:'Lora',serif;min-height:52px;gap:4px;position:relative}
+.tab svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round}
+.tab.active{color:#d4aa50}
+#reader-view{padding:20px 0 60px}
+.chd{text-align:center;margin:0 16px 24px;padding-bottom:18px;border-bottom:2px solid #e4d4b0;position:relative}
+.chd::after{content:'';position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);width:40px;height:2px;background:#d4aa50}
+.chbook{font-size:10px;color:#8b1a1a;letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px;font-family:'Lora',serif}
+.chnum{font-size:38px;color:#2a1f0e;line-height:1;font-weight:600}
+.chnav{display:flex;justify-content:center;gap:10px;margin-top:12px}
+.chnb{font-size:11px;color:#7a6040;background:#ede0c4;border:1.5px solid #e4d4b0;border-radius:6px;padding:6px 14px;cursor:pointer;font-family:'Lora',serif}
+.chnb:active{border-color:#d4aa50;color:#8b1a1a}
+.vr{display:flex;margin-bottom:1px}
+.vn{min-width:52px;padding:14px 8px 14px 14px;font-size:11px;font-weight:600;font-family:'Lora',serif;flex-shrink:0;text-align:right;cursor:pointer;user-select:none;display:flex;align-items:flex-start;justify-content:flex-end;padding-top:16px;border-left:3px solid transparent;transition:all .12s;color:#8b1a1a}
+.vn:active{color:#d4aa50;border-left-color:#d4aa50}
+.vn.hn{border-left-color:#1a5c5c;color:#1a5c5c}
+.vt{font-size:19px;line-height:1.82;color:#2a1f0e;flex:1;padding:10px 18px 10px 6px;word-break:break-word}
+.wh{border-bottom:2px solid #9b4400;color:#9b4400;cursor:pointer;border-radius:2px;padding:0 1px}
+.wg{border-bottom:2px solid #1a4a7a;color:#1a4a7a;cursor:pointer;border-radius:2px;padding:0 1px}
+.wh:active,.wh.lit{background:rgba(155,68,0,.12)}
+.wg:active,.wg.lit{background:rgba(26,74,122,.12)}
+.sn{font-family:monospace;font-size:8px;vertical-align:super;margin-left:1px;opacity:.65;cursor:pointer;display:none}
+.sn.wh{color:#9b4400}.sn.wg{color:#1a4a7a}
+.nodata{text-align:center;padding:52px 24px;color:#7a6040}
+.nodata .ic{font-size:40px;margin-bottom:14px;opacity:.4}
+.nodata h3{font-size:16px;color:#4a3820;margin-bottom:10px;font-family:'Lora',serif}
+.nodata p{font-size:15px;line-height:1.75}
+.loading{text-align:center;padding:60px 24px;color:#7a6040;font-size:16px;font-style:italic}
+.panel{position:fixed;inset:0;background:#f5ead6;z-index:50;display:flex;flex-direction:column;transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.ph{display:flex;align-items:center;padding:14px;background:#2a1f0e;border-bottom:2px solid #d4aa50}
+.ph-title{font-size:15px;color:#d4aa50;flex:1;letter-spacing:.08em;font-family:'Lora',serif}
+.pclose{width:36px;height:36px;border:none;background:transparent;color:#a89070;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pclose:active{color:#d4aa50}
+#bsearch{margin:12px 14px;padding:10px 14px;background:#ede0c4;border:1.5px solid #e4d4b0;border-radius:10px;color:#2a1f0e;font-family:'Lora',serif;font-size:16px;outline:none;width:calc(100% - 28px)}
+#bsearch:focus{border-color:#d4aa50}
+#blist{flex:1;overflow-y:auto;padding-bottom:20px}
+.bi{display:flex;align-items:center;padding:13px 16px;cursor:pointer;border-bottom:1px solid #e4d4b0;gap:12px;min-height:52px}
+.bi:active{background:#ede0c4}
+.binum{width:26px;font-size:11px;color:#a89070;text-align:right;font-family:'Lora',serif}
+.biname{font-size:18px;color:#4a3820;flex:1;font-weight:500}
+.bich{font-size:12px;color:#a89070}
+.tlbl2{padding:8px 14px 4px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:#8b1a1a;font-family:'Lora',serif;font-weight:600}
+#cgrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:14px;overflow-y:auto;flex:1}
+.cb{aspect-ratio:1;border:1.5px solid #e4d4b0;background:#ede0c4;border-radius:10px;color:#4a3820;font-size:15px;cursor:pointer;font-family:'Lora',serif;min-height:44px}
+.cb:active,.cb.cur{background:#8b1a1a;color:#fff;border-color:#8b1a1a}
+.cb.hasdata{border-color:#d4aa50;color:#8b1a1a}
+.cb.hasdata.cur{background:#8b1a1a;color:#fff}
+#dov{position:fixed;inset:0;background:rgba(20,10,0,.55);z-index:80;opacity:0;pointer-events:none;transition:opacity .2s}
+#dov.open{opacity:1;pointer-events:all}
+#drawer{position:fixed;bottom:0;left:0;right:0;background:#f5ead6;border-radius:20px 20px 0 0;border-top:2px solid #d4aa50;z-index:81;max-height:72vh;transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:calc(20px + env(safe-area-inset-bottom,0))}
+#drawer.open{transform:translateY(0)}
+.dh{width:40px;height:4px;background:#e4d4b0;border-radius:2px;margin:12px auto 0;flex-shrink:0}
+#dcontent{flex:1;overflow-y:auto;padding:14px 20px 0}
+.dtag{display:inline-block;font-family:monospace;font-size:11px;padding:3px 10px;border-radius:6px;margin-bottom:10px;font-weight:500}
+.dtag.H{background:rgba(155,68,0,.12);color:#9b4400;border:1px solid rgba(155,68,0,.2)}
+.dtag.G{background:rgba(26,74,122,.1);color:#1a4a7a;border:1px solid rgba(26,74,122,.2)}
+.dword{font-size:26px;color:#2a1f0e;margin-bottom:4px;font-style:italic;font-weight:500}
+.dorig{font-size:32px;margin-bottom:4px;line-height:1.15;color:#d4aa50}
+.dxlit{font-family:monospace;font-size:12px;color:#7a6040;margin-bottom:2px}
+.dpron{font-size:13px;color:#1a5c5c;margin-bottom:8px;font-style:italic}
+.dpos{display:inline-block;font-size:10px;letter-spacing:.09em;text-transform:uppercase;background:#ede0c4;color:#7a6040;padding:3px 9px;border-radius:4px;margin-bottom:12px;border:1px solid #e4d4b0}
+.ddiv{height:1px;background:#e4d4b0;margin:10px 0}
+.dlbl{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#8b1a1a;margin-bottom:5px;font-weight:600}
+.ddef{font-size:17px;line-height:1.65;color:#4a3820}
+.dkjv{font-size:13px;color:#7a6040;margin-top:8px;font-style:italic;padding-top:8px;border-top:1px solid #e4d4b0}
+.dnbtn{display:flex;align-items:center;gap:8px;margin-top:16px;padding:12px 14px;background:#ede0c4;border:1.5px solid #e4d4b0;border-radius:10px;cursor:pointer;color:#7a6040;font-size:14px}
+.dnbtn:active{border-color:#1a5c5c;color:#1a5c5c}
+#notes-view{display:flex;flex-direction:column}
+.nbar{display:flex;align-items:center;gap:8px;padding:12px 14px;background:#ede0c4;border-bottom:1px solid #e4d4b0;flex-shrink:0}
+.nbar-title{font-size:14px;color:#4a3820;flex:1;letter-spacing:.07em}
+.nexp{display:flex;align-items:center;gap:5px;padding:7px 12px;border:1.5px solid #e4d4b0;border-radius:8px;background:#f5ead6;color:#7a6040;font-size:12px;cursor:pointer;font-family:'Lora',serif;white-space:nowrap;letter-spacing:.04em}
+.nexp:active{border-color:#8b1a1a;color:#8b1a1a}
+#nscroll{flex:1;overflow-y:auto;padding:12px 0}
+.nc{margin:0 14px 12px;background:#fff;border:1px solid #e4d4b0;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.nch{display:flex;align-items:center;gap:8px;padding:10px 14px;background:#2a1f0e;cursor:pointer}
+.nref{font-size:12px;color:#d4aa50;flex:1;letter-spacing:.06em}
+.ndate{font-size:11px;color:#a89070}
+.ndel{width:28px;height:28px;border:none;background:transparent;color:rgba(255,255,255,.3);font-size:18px;cursor:pointer}
+.ndel:active{color:#ff6666}
+.nq{padding:8px 14px;font-size:13px;color:#7a6040;font-style:italic;border-bottom:1px solid #e4d4b0;line-height:1.55;background:#f5ead6}
+.nbody{padding:12px 14px;font-size:16px;line-height:1.7;color:#4a3820;white-space:pre-wrap;word-break:break-word;cursor:pointer}
+.nempty{padding:60px 24px;text-align:center;color:#7a6040;font-size:15px;line-height:1.8;font-style:italic}
+#neditor{position:fixed;inset:0;background:#f5ead6;z-index:60;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+#neditor.open{transform:translateY(0)}
+.edh{display:flex;align-items:center;gap:10px;padding:13px 14px;background:#2a1f0e;border-bottom:2px solid #d4aa50;flex-shrink:0;padding-top:calc(13px + env(safe-area-inset-top,0))}
+.edref{font-size:14px;color:#d4aa50;flex:1;letter-spacing:.08em}
+.edsave{padding:8px 20px;border:none;background:#8b1a1a;color:#fff;border-radius:8px;font-size:13px;cursor:pointer;letter-spacing:.06em}
+.edsave:active{background:#6b1010}
+.edq{padding:10px 16px;background:#ede0c4;border-bottom:1px solid #e4d4b0;font-size:14px;color:#7a6040;font-style:italic;line-height:1.55;flex-shrink:0}
+#nota{flex:1;padding:16px;background:#f5ead6;border:none;outline:none;color:#2a1f0e;font-family:'Lora',serif;font-size:18px;line-height:1.75;resize:none}
+#nota::placeholder{color:#a89070}
+#search-view{display:flex;flex-direction:column}
+.sbar2{padding:10px 14px;background:#ede0c4;border-bottom:1px solid #e4d4b0}
+#sinput{width:100%;padding:10px 14px;background:#f5ead6;border:1.5px solid #e4d4b0;border-radius:10px;color:#2a1f0e;font-family:'Lora',serif;font-size:17px;outline:none;box-sizing:border-box}
+#sinput:focus{border-color:#d4aa50}
+#sresults{flex:1;overflow-y:auto}
+.sr{padding:14px 16px;border-bottom:1px solid #e4d4b0;cursor:pointer}
+.sr:active{background:#ede0c4}
+.sref{font-size:10px;color:#8b1a1a;letter-spacing:.09em;text-transform:uppercase;margin-bottom:4px}
+.stxt{font-size:15px;line-height:1.55;color:#4a3820}
+.sempty{padding:40px 24px;text-align:center;color:#7a6040;font-size:15px;font-style:italic}
+#sload{padding:6px 14px;font-size:12px;color:#7a6040;background:#ede0c4;border-bottom:1px solid #e4d4b0;font-style:italic}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#e4d4b0}
+@media(min-width:600px){.vt{font-size:20px}#cgrid{grid-template-columns:repeat(8,1fr)}.vn{min-width:60px}}
+</style>
 </head>
-<body style="margin:0;padding:0;background:#1c1008">
-<div id="root"></div>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script type="text/babel">
-const { useState, useEffect, useRef, useCallback } = React;
+<body>
+<div id="app">
+  <div id="topnav">
+    <button class="nb" id="btn-books">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div id="navtitle">— tap &#9776; to begin —</div>
+    <button class="nb" id="btn-search-tab">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+  </div>
+  <div id="toolbar">
+    <span class="tlbl" style="color:#9b4400">H</span>
+    <label class="tg"><input type="checkbox" id="tH" checked><span class="tgs"></span></label>
+    <span class="tlbl" style="color:#1a4a7a;margin-left:8px">G</span>
+    <label class="tg"><input type="checkbox" id="tG" checked><span class="tgs"></span></label>
+    <span class="tsep"></span>
+    <span class="tlbl">Nums</span>
+    <label class="tg"><input type="checkbox" id="tN"><span class="tgs"></span></label>
+    <div class="fzw">
+      <button class="fzb" id="fz-dn">A&minus;</button>
+      <button class="fzb" id="fz-up">A+</button>
+    </div>
+  </div>
+  <div id="main">
+    <div id="reader-view" class="view active">
+      <div id="reader">
+        <div class="nodata">
+          <div class="ic">&#10011;</div>
+          <h3>Welcome to Strongs Bible</h3>
+          <p>Tap <strong>&#9776;</strong> to choose a book.<br><br>
+          <span style="color:#9b4400;font-weight:600">Amber</span> = Hebrew &nbsp;&middot;&nbsp;
+          <span style="color:#1a4a7a;font-weight:600">Blue</span> = Greek<br><br>
+          Tap a coloured word &rarr; Strong&#8217;s definition.<br>
+          <span style="color:#1a5c5c;font-weight:600">Tap a verse number</span> &rarr; add a note.</p>
+        </div>
+      </div>
+    </div>
+    <div id="notes-view" class="view">
+      <div class="nbar">
+        <span class="nbar-title">Study Notes</span>
+        <button class="nexp" id="btn-exp-txt">Export .txt</button>
+        <button class="nexp" id="btn-exp-pdf">PDF</button>
+      </div>
+      <div id="nscroll"><div class="nempty">No notes yet.<br><br>Tap any verse number while reading<br>to add a study note.</div></div>
+    </div>
+    <div id="search-view" class="view">
+      <div class="sbar2"><input type="search" id="sinput" placeholder="Search verses&hellip;" autocomplete="off"></div>
+      <div id="sload" style="display:none"></div>
+      <div id="sresults"><div class="sempty">Type to search loaded books</div></div>
+    </div>
+  </div>
+  <div id="tabbar">
+    <button class="tab active" id="tab-read">
+      <svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Read
+    </button>
+    <button class="tab" id="tab-notes">
+      <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Notes
+      <span id="ndot" style="width:5px;height:5px;border-radius:50%;background:#1a5c5c;position:absolute;top:8px;right:calc(50% - 16px);display:none"></span>
+    </button>
+    <button class="tab" id="tab-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Search
+    </button>
+  </div>
+</div>
 
+<!-- BOOK PANEL -->
+<div id="bpanel" class="panel" style="transform:translateX(-100%)">
+  <div class="ph">
+    <span class="ph-title">Books of the Bible</span>
+    <button class="pclose" id="btn-close-books">&#x2715;</button>
+  </div>
+  <input type="search" id="bsearch" placeholder="Search books&hellip;" autocomplete="off">
+  <div id="blist"></div>
+</div>
 
+<!-- CHAPTER PANEL -->
+<div id="cpanel" class="panel" style="transform:translateX(100%)">
+  <div class="ph">
+    <button class="nb" id="btn-back-ch" style="color:#a89070;margin-left:-6px">&#8249;</button>
+    <span class="ph-title" id="cptitle">Chapters</span>
+    <button class="pclose" id="btn-close-ch">&#x2715;</button>
+  </div>
+  <div id="cgrid"></div>
+</div>
 
-// ── SAMPLE DATA (Genesis 1, John 3, Romans 8) ──────────────────────────────
-const VERSES_DATA = {};
+<!-- NOTE EDITOR -->
+<div id="neditor">
+  <div class="edh">
+    <button class="nb" id="btn-close-ed" style="color:#a89070">&#x2715;</button>
+    <span class="edref" id="edref"></span>
+    <button class="edsave" id="btn-save-note">Save</button>
+  </div>
+  <div class="edq" id="edq"></div>
+  <textarea id="nota" placeholder="Study notes, cross-references, observations, prayer&hellip;"></textarea>
+</div>
 
-// STRONGS_DATA loaded from GitHub repo (full 14,298 entries)
-// Populated in useEffect on mount
-let STRONGS_DATA = {};
+<!-- STRONGS DRAWER -->
+<div id="dov"></div>
+<div id="drawer"><div class="dh"></div><div id="dcontent"></div></div>
 
-// ── BOOKS ──────────────────────────────────────────────────────────────────
+<script>
+'use strict';
+
+// ── CONSTANTS ─────────────────────────────────────────────────
+const REPO = 'https://raw.githubusercontent.com/supersonicandchill/Strongs/main/data';
+
 const BOOKS = [
-  {id:"GEN",n:"Genesis",t:"OT",ch:50},{id:"EXO",n:"Exodus",t:"OT",ch:40},{id:"LEV",n:"Leviticus",t:"OT",ch:27},
-  {id:"NUM",n:"Numbers",t:"OT",ch:36},{id:"DEU",n:"Deuteronomy",t:"OT",ch:34},{id:"JOS",n:"Joshua",t:"OT",ch:24},
-  {id:"JDG",n:"Judges",t:"OT",ch:21},{id:"RUT",n:"Ruth",t:"OT",ch:4},{id:"1SA",n:"1 Samuel",t:"OT",ch:31},
-  {id:"2SA",n:"2 Samuel",t:"OT",ch:24},{id:"1KI",n:"1 Kings",t:"OT",ch:22},{id:"2KI",n:"2 Kings",t:"OT",ch:25},
-  {id:"1CH",n:"1 Chronicles",t:"OT",ch:29},{id:"2CH",n:"2 Chronicles",t:"OT",ch:36},{id:"EZR",n:"Ezra",t:"OT",ch:10},
-  {id:"NEH",n:"Nehemiah",t:"OT",ch:13},{id:"EST",n:"Esther",t:"OT",ch:10},{id:"JOB",n:"Job",t:"OT",ch:42},
-  {id:"PSA",n:"Psalms",t:"OT",ch:150},{id:"PRO",n:"Proverbs",t:"OT",ch:31},{id:"ECC",n:"Ecclesiastes",t:"OT",ch:12},
-  {id:"SNG",n:"Song of Solomon",t:"OT",ch:8},{id:"ISA",n:"Isaiah",t:"OT",ch:66},{id:"JER",n:"Jeremiah",t:"OT",ch:52},
-  {id:"LAM",n:"Lamentations",t:"OT",ch:5},{id:"EZK",n:"Ezekiel",t:"OT",ch:48},{id:"DAN",n:"Daniel",t:"OT",ch:12},
-  {id:"HOS",n:"Hosea",t:"OT",ch:14},{id:"JOL",n:"Joel",t:"OT",ch:3},{id:"AMO",n:"Amos",t:"OT",ch:9},
-  {id:"OBA",n:"Obadiah",t:"OT",ch:1},{id:"JON",n:"Jonah",t:"OT",ch:4},{id:"MIC",n:"Micah",t:"OT",ch:7},
-  {id:"NAH",n:"Nahum",t:"OT",ch:3},{id:"HAB",n:"Habakkuk",t:"OT",ch:3},{id:"ZEP",n:"Zephaniah",t:"OT",ch:3},
-  {id:"HAG",n:"Haggai",t:"OT",ch:2},{id:"ZEC",n:"Zechariah",t:"OT",ch:14},{id:"MAL",n:"Malachi",t:"OT",ch:4},
-  {id:"MAT",n:"Matthew",t:"NT",ch:28},{id:"MRK",n:"Mark",t:"NT",ch:16},{id:"LUK",n:"Luke",t:"NT",ch:24},
-  {id:"JHN",n:"John",t:"NT",ch:21},{id:"ACT",n:"Acts",t:"NT",ch:28},{id:"ROM",n:"Romans",t:"NT",ch:16},
-  {id:"1CO",n:"1 Corinthians",t:"NT",ch:16},{id:"2CO",n:"2 Corinthians",t:"NT",ch:13},{id:"GAL",n:"Galatians",t:"NT",ch:6},
-  {id:"EPH",n:"Ephesians",t:"NT",ch:6},{id:"PHP",n:"Philippians",t:"NT",ch:4},{id:"COL",n:"Colossians",t:"NT",ch:4},
-  {id:"1TH",n:"1 Thessalonians",t:"NT",ch:5},{id:"2TH",n:"2 Thessalonians",t:"NT",ch:3},{id:"1TI",n:"1 Timothy",t:"NT",ch:6},
-  {id:"2TI",n:"2 Timothy",t:"NT",ch:4},{id:"TIT",n:"Titus",t:"NT",ch:3},{id:"PHM",n:"Philemon",t:"NT",ch:1},
-  {id:"HEB",n:"Hebrews",t:"NT",ch:13},{id:"JAS",n:"James",t:"NT",ch:5},{id:"1PE",n:"1 Peter",t:"NT",ch:5},
-  {id:"2PE",n:"2 Peter",t:"NT",ch:3},{id:"1JN",n:"1 John",t:"NT",ch:5},{id:"2JN",n:"2 John",t:"NT",ch:1},
-  {id:"3JN",n:"3 John",t:"NT",ch:1},{id:"JUD",n:"Jude",t:"NT",ch:1},{id:"REV",n:"Revelation",t:"NT",ch:22}
+  {id:'GEN',n:'Genesis',t:'OT',ch:50},{id:'EXO',n:'Exodus',t:'OT',ch:40},
+  {id:'LEV',n:'Leviticus',t:'OT',ch:27},{id:'NUM',n:'Numbers',t:'OT',ch:36},
+  {id:'DEU',n:'Deuteronomy',t:'OT',ch:34},{id:'JOS',n:'Joshua',t:'OT',ch:24},
+  {id:'JDG',n:'Judges',t:'OT',ch:21},{id:'RUT',n:'Ruth',t:'OT',ch:4},
+  {id:'1SA',n:'1 Samuel',t:'OT',ch:31},{id:'2SA',n:'2 Samuel',t:'OT',ch:24},
+  {id:'1KI',n:'1 Kings',t:'OT',ch:22},{id:'2KI',n:'2 Kings',t:'OT',ch:25},
+  {id:'1CH',n:'1 Chronicles',t:'OT',ch:29},{id:'2CH',n:'2 Chronicles',t:'OT',ch:36},
+  {id:'EZR',n:'Ezra',t:'OT',ch:10},{id:'NEH',n:'Nehemiah',t:'OT',ch:13},
+  {id:'EST',n:'Esther',t:'OT',ch:10},{id:'JOB',n:'Job',t:'OT',ch:42},
+  {id:'PSA',n:'Psalms',t:'OT',ch:150},{id:'PRO',n:'Proverbs',t:'OT',ch:31},
+  {id:'ECC',n:'Ecclesiastes',t:'OT',ch:12},{id:'SNG',n:'Song of Solomon',t:'OT',ch:8},
+  {id:'ISA',n:'Isaiah',t:'OT',ch:66},{id:'JER',n:'Jeremiah',t:'OT',ch:52},
+  {id:'LAM',n:'Lamentations',t:'OT',ch:5},{id:'EZK',n:'Ezekiel',t:'OT',ch:48},
+  {id:'DAN',n:'Daniel',t:'OT',ch:12},{id:'HOS',n:'Hosea',t:'OT',ch:14},
+  {id:'JOL',n:'Joel',t:'OT',ch:3},{id:'AMO',n:'Amos',t:'OT',ch:9},
+  {id:'OBA',n:'Obadiah',t:'OT',ch:1},{id:'JON',n:'Jonah',t:'OT',ch:4},
+  {id:'MIC',n:'Micah',t:'OT',ch:7},{id:'NAH',n:'Nahum',t:'OT',ch:3},
+  {id:'HAB',n:'Habakkuk',t:'OT',ch:3},{id:'ZEP',n:'Zephaniah',t:'OT',ch:3},
+  {id:'HAG',n:'Haggai',t:'OT',ch:2},{id:'ZEC',n:'Zechariah',t:'OT',ch:14},
+  {id:'MAL',n:'Malachi',t:'OT',ch:4},
+  {id:'MAT',n:'Matthew',t:'NT',ch:28},{id:'MRK',n:'Mark',t:'NT',ch:16},
+  {id:'LUK',n:'Luke',t:'NT',ch:24},{id:'JHN',n:'John',t:'NT',ch:21},
+  {id:'ACT',n:'Acts',t:'NT',ch:28},{id:'ROM',n:'Romans',t:'NT',ch:16},
+  {id:'1CO',n:'1 Corinthians',t:'NT',ch:16},{id:'2CO',n:'2 Corinthians',t:'NT',ch:13},
+  {id:'GAL',n:'Galatians',t:'NT',ch:6},{id:'EPH',n:'Ephesians',t:'NT',ch:6},
+  {id:'PHP',n:'Philippians',t:'NT',ch:4},{id:'COL',n:'Colossians',t:'NT',ch:4},
+  {id:'1TH',n:'1 Thessalonians',t:'NT',ch:5},{id:'2TH',n:'2 Thessalonians',t:'NT',ch:3},
+  {id:'1TI',n:'1 Timothy',t:'NT',ch:6},{id:'2TI',n:'2 Timothy',t:'NT',ch:4},
+  {id:'TIT',n:'Titus',t:'NT',ch:3},{id:'PHM',n:'Philemon',t:'NT',ch:1},
+  {id:'HEB',n:'Hebrews',t:'NT',ch:13},{id:'JAS',n:'James',t:'NT',ch:5},
+  {id:'1PE',n:'1 Peter',t:'NT',ch:5},{id:'2PE',n:'2 Peter',t:'NT',ch:3},
+  {id:'1JN',n:'1 John',t:'NT',ch:5},{id:'2JN',n:'2 John',t:'NT',ch:1},
+  {id:'3JN',n:'3 John',t:'NT',ch:1},{id:'JUD',n:'Jude',t:'NT',ch:1},
+  {id:'REV',n:'Revelation',t:'NT',ch:22}
 ];
 
-const C = {
-  parch:"#f5ead6", parch2:"#ede0c4", parch3:"#e4d4b0",
-  ink:"#2a1f0e", ink2:"#4a3820", ink3:"#7a6040", ink4:"#a89070",
-  crimson:"#8b1a1a", gold:"#d4aa50", teal:"#1a5c5c",
-  heb:"#9b4400", grk:"#1a4a7a"
-};
+// ── STATE ──────────────────────────────────────────────────────
+const VC = {};        // verse cache: VC[bid] = {ch: {v: [tokens]}}
+const STR = {};       // strongs dict
+let cBook = null, cCh = null, editKey = null;
+let fz = +( localStorage.getItem('fz') || 19 );
+let notes = JSON.parse(localStorage.getItem('sb_notes3') || '{}');
+let showNums = false;
 
-// ── TOGGLE COMPONENT ────────────────────────────────────────────────────────
-function Toggle({ checked, onChange, color }) {
-  return (
-    <label style={{ position:"relative", width:36, height:20, flexShrink:0, cursor:"pointer", display:"inline-block" }}>
-      <input type="checkbox" checked={checked} onChange={onChange}
-        style={{ opacity:0, width:0, height:0, position:"absolute" }} />
-      <span style={{
-        position:"absolute", inset:0, background: checked ? color : C.parch3,
-        borderRadius:20, transition:"0.2s", border:`1.5px solid ${checked ? color : C.parch3}`
-      }}>
-        <span style={{
-          position:"absolute", width:14, height:14, left:2, top:1,
-          background: checked ? "#fff" : C.ink3, borderRadius:"50%",
-          transition:"0.2s", transform: checked ? "translateX(16px)" : "none"
-        }} />
-      </span>
-    </label>
-  );
+// ── HELPERS ────────────────────────────────────────────────────
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+const $ = id => document.getElementById(id);
+const iso = () => new Date().toISOString().slice(0,10);
+const bk = id => BOOKS.find(b => b.id === id);
+
+function saveNotes() { localStorage.setItem('sb_notes3', JSON.stringify(notes)); updateDot(); }
+
+function updateDot() {
+  $('ndot').style.display = Object.keys(notes).length > 0 ? 'block' : 'none';
 }
 
-// ── MAIN APP ────────────────────────────────────────────────────────────────
-function StrongsBible() {
-  const [tab, setTab]           = useState("read");
-  const [strongsLoaded, setStrongsLoaded] = useState(false);
-  const [strongsError, setStrongsError]   = useState(false);
+// ── FETCH ──────────────────────────────────────────────────────
+async function loadStrongs() {
+  try {
+    const [h, g] = await Promise.all([
+      fetch(REPO + '/strongs_h.json').then(r => r.json()),
+      fetch(REPO + '/strongs_g.json').then(r => r.json())
+    ]);
+    Object.assign(STR, h, g);
+  } catch(e) {
+    try { Object.assign(STR, await fetch(REPO + '/strongs.json').then(r => r.json())); } catch {}
+  }
+}
 
-  // Load full Strong's dictionary from GitHub on mount
-  useEffect(() => {
-    const BASE = "https://raw.githubusercontent.com/supersonicandchill/Strongs/main/data";
-    Promise.all([
-      fetch(`${BASE}/strongs_h.json`).then(r => r.json()),
-      fetch(`${BASE}/strongs_g.json`).then(r => r.json()),
-    ]).then(([h, g]) => {
-      Object.assign(STRONGS_DATA, h, g);
-      setStrongsLoaded(true);
-    }).catch(() => {
-      // Fallback: try the combined file
-      fetch(`${BASE}/strongs.json`)
-        .then(r => r.json())
-        .then(d => { Object.assign(STRONGS_DATA, d); setStrongsLoaded(true); })
-        .catch(() => setStrongsError(true));
-    });
-  }, []);
-  const [panel, setPanel]       = useState(null);
-  const [cBook, setCBook]       = useState(null);
-  const [cCh, setCCh]           = useState(null);
-  const [verses, setVerses]     = useState(null);
-  const [drawer, setDrawer]     = useState(null);
-  const [noteEd, setNoteEd]     = useState(null);
-  const [noteText, setNoteText] = useState("");
-  const [notes, setNotes]       = useState({});
-  const [showH, setShowH]       = useState(true);
-  const [showG, setShowG]       = useState(true);
-  const [showNums, setShowNums] = useState(false);
-  const [fz, setFz]             = useState(19);
-  const [bookQ, setBookQ]       = useState("");
-  const [searchQ, setSearchQ]   = useState("");
-  const [hits, setHits]         = useState([]);
+async function ensureBook(bid) {
+  if (VC[bid]) return VC[bid];
+  try {
+    const r = await fetch(REPO + '/verses/' + bid + '.json');
+    if (r.ok) { VC[bid] = await r.json(); return VC[bid]; }
+  } catch(e) {}
+  return null;
+}
 
-  // Save notes
-  const saveNotes = (n) => { setNotes(n); localStorage.setItem("sb_notes2", JSON.stringify(n)); };
-  useEffect(() => {
-    try { setNotes(JSON.parse(localStorage.getItem("sb_notes2") || "{}")); } catch {}
-  }, []);
+// ── VIEWS ──────────────────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  $(id + '-view').classList.add('active');
+  $('tab-' + id).classList.add('active');
+  $('toolbar').style.display = id === 'reader' ? 'flex' : 'none';
+}
 
-  // Load chapter - fetches from GitHub if not cached
-  const loadCh = useCallback(async (bid, ch) => {
-    const bk = BOOKS.find(b => b.id === bid);
-    setCBook(bk); setCCh(ch); setPanel(null); setTab("read");
-    setVerses("loading");
-    if (!VERSES_DATA[bid]) {
-      try {
-        const r = await fetch("https://raw.githubusercontent.com/supersonicandchill/Strongs/main/data/verses/" + bid + ".json");
-        if (r.ok) VERSES_DATA[bid] = await r.json();
-      } catch(e) {}
+function openPanel(id) { $(id).style.transform = 'translateX(0)'; }
+function closePanel(id) { $(id).style.transform = id === 'bpanel' ? 'translateX(-100%)' : 'translateX(100%)'; }
+
+// ── BOOK LIST ──────────────────────────────────────────────────
+function buildBookList(filter) {
+  const fl = (filter || '').toLowerCase();
+  let html = '', last = null;
+  BOOKS.forEach((b, i) => {
+    if (fl && !b.n.toLowerCase().includes(fl)) return;
+    if (b.t !== last) {
+      html += '<div class="tlbl2">' + (b.t === 'OT' ? 'Old Testament' : 'New Testament') + '</div>';
+      last = b.t;
     }
-    const d = VERSES_DATA[bid]?.[String(ch)] || null;
-    setVerses(d ? { bid, ch, data: d } : null);
-  }, []);
+    html += '<div class="bi" data-bid="' + b.id + '">' +
+      '<span class="binum">' + (i+1) + '</span>' +
+      '<span class="biname">' + esc(b.n) + '</span>' +
+      '<span class="bich">' + b.ch + 'ch</span></div>';
+  });
+  $('blist').innerHTML = html || '<div class="sempty">No books found</div>';
+}
 
-  // Search
-  useEffect(() => {
-    if (searchQ.length < 2) { setHits([]); return; }
-    const ql = searchQ.toLowerCase(), results = [];
-    Object.entries(VERSES_DATA).forEach(([bid, chs]) => {
-      const bk = BOOKS.find(b => b.id === bid);
-      Object.entries(chs).forEach(([ch, vv]) => {
-        Object.entries(vv).forEach(([v, toks]) => {
-          const txt = toks.map(t => t.w || "").join(" ");
-          if (txt.toLowerCase().includes(ql)) results.push({ bid, ch:+ch, v:+v, bk, txt });
-        });
+// ── CHAPTER GRID ───────────────────────────────────────────────
+function buildChGrid() {
+  if (!cBook) return;
+  $('cptitle').textContent = cBook.n;
+  let html = '';
+  for (let c = 1; c <= cBook.ch; c++) {
+    let cls = 'cb';
+    if (cCh === c) cls += ' cur';
+    html += '<button class="' + cls + '" data-ch="' + c + '">' + c + '</button>';
+  }
+  $('cgrid').innerHTML = html;
+}
+
+// ── LOAD CHAPTER ───────────────────────────────────────────────
+async function loadCh(bid, ch) {
+  closePanel('bpanel'); closePanel('cpanel');
+  cBook = bk(bid); cCh = +ch;
+  localStorage.setItem('lastPos', JSON.stringify({b: bid, c: cCh}));
+  $('navtitle').textContent = cBook.n.toUpperCase() + ' · ' + cCh;
+  showTab('reader');
+  const rd = $('reader');
+  rd.innerHTML = '<div class="loading">Loading ' + esc(cBook.n) + ' ' + cCh + '…</div>';
+  rd.scrollTop = 0;
+  const bd = await ensureBook(bid);
+  const cd = bd ? bd[String(cCh)] : null;
+  if (!cd || !Object.keys(cd).length) {
+    rd.innerHTML = '<div class="nodata"><div class="ic">&#128220;</div><h3>Chapter not found</h3><p>This chapter wasn't parsed from the source.</p></div>';
+    return;
+  }
+  let html = buildChHeader(bid, cCh, cBook.ch);
+  Object.keys(cd).map(Number).sort((a,b)=>a-b).forEach(vn => {
+    const nk = bid + '|' + cCh + '|' + vn;
+    const hn = !!notes[nk];
+    html += '<div class="vr" id="vrow-' + vn + '">';
+    html += '<div class="vn' + (hn ? ' hn' : '') + '" data-bid="' + bid + '" data-ch="' + cCh + '" data-v="' + vn + '">' + vn + '</div>';
+    html += '<div class="vt" style="font-size:' + fz + 'px">' + buildVerseHtml(cd[String(vn)], bid, cCh, vn) + '</div>';
+    html += '</div>';
+  });
+  rd.innerHTML = html;
+  rd.scrollTop = 0;
+  applyDisplay();
+}
+
+function buildChHeader(bid, ch, max) {
+  const bi = BOOKS.findIndex(b => b.id === bid);
+  let p = '', nx = '';
+  if (ch > 1) p = '<button class="chnb" data-bid="' + bid + '" data-ch="' + (ch-1) + '">‹ ' + (ch-1) + '</button>';
+  else if (bi > 0) { const pb = BOOKS[bi-1]; p = '<button class="chnb" data-bid="' + pb.id + '" data-ch="' + pb.ch + '">‹ ' + esc(pb.n) + '</button>'; }
+  if (ch < max) nx = '<button class="chnb" data-bid="' + bid + '" data-ch="' + (ch+1) + '">' + (ch+1) + ' ›</button>';
+  else if (bi < BOOKS.length-1) { const nb = BOOKS[bi+1]; nx = '<button class="chnb" data-bid="' + nb.id + '" data-ch="1">' + esc(nb.n) + ' ›</button>'; }
+  return '<div class="chd">' +
+    '<div class="chbook">' + esc(bk(bid).n) + '</div>' +
+    '<div class="chnum">' + ch + '</div>' +
+    '<div class="chnav">' + p + nx + '</div></div>';
+}
+
+function buildVerseHtml(toks, bid, ch, vn) {
+  let h = '';
+  toks.forEach(t => {
+    if (!t.w) { if (t.p) h += esc(t.p); return; }
+    const p = t.p ? esc(t.p) : '';
+    if (t.s) {
+      const isH = t.s.startsWith('H');
+      const cls = isH ? 'wh' : 'wg';
+      const se = esc(t.s), we = esc(t.w);
+      h += '<span class="' + cls + '" data-s="' + se + '" data-word="' + we + '" data-bid="' + esc(bid) + '" data-ch="' + ch + '" data-vn="' + vn + '">' + we + '</span>';
+      h += '<span class="sn ' + cls + '" data-s="' + se + '" data-word="' + we + '" data-bid="' + esc(bid) + '" data-ch="' + ch + '" data-vn="' + vn + '">' + se + '</span>';
+      h += p + ' ';
+    } else {
+      h += '<span>' + esc(t.w) + '</span>' + p + ' ';
+    }
+  });
+  return h.trim();
+}
+
+// ── DISPLAY TOGGLES ────────────────────────────────────────────
+function applyDisplay() {
+  const sh = $('tH').checked, sg = $('tG').checked;
+  showNums = $('tN').checked;
+  document.querySelectorAll('.wh').forEach(el => {
+    el.style.borderBottomColor = sh ? '' : 'transparent';
+    el.style.color = sh ? '' : '#2a1f0e';
+    el.style.cursor = sh ? 'pointer' : 'default';
+  });
+  document.querySelectorAll('.wg').forEach(el => {
+    el.style.borderBottomColor = sg ? '' : 'transparent';
+    el.style.color = sg ? '' : '#2a1f0e';
+    el.style.cursor = sg ? 'pointer' : 'default';
+  });
+  document.querySelectorAll('.sn').forEach(el => {
+    el.style.display = showNums ? 'inline' : 'none';
+  });
+}
+
+// ── STRONGS DRAWER ─────────────────────────────────────────────
+function showStrongs(word, code, bid, ch, vn) {
+  document.querySelectorAll('.wh.lit,.wg.lit').forEach(el => el.classList.remove('lit'));
+  document.querySelectorAll('[data-s="' + code + '"]').forEach(el => el.classList.add('lit'));
+  const en = STR[code];
+  const ty = code.startsWith('H') ? 'H' : 'G';
+  const lb = ty === 'H' ? 'Hebrew' : 'Greek';
+  const bookName = bk(bid) ? bk(bid).n : bid;
+  let h = '<span class="dtag ' + ty + '">' + esc(code) + ' · ' + lb + '</span>';
+  h += '<div class="dword">“' + esc(word) + '”</div>';
+  if (en) {
+    if (en.lemma) h += '<div class="dorig">' + esc(en.lemma) + '</div>';
+    if (en.xlit)  h += '<div class="dxlit">' + esc(en.xlit) + '</div>';
+    if (en.pron)  h += '<div class="dpron">/' + esc(en.pron) + '/</div>';
+    if (en.pos)   h += '<div class="dpos">' + esc(en.pos) + '</div>';
+    h += '<div class="ddiv"></div><div class="dlbl">Definition</div>';
+    h += '<div class="ddef">' + esc(en.definition) + '</div>';
+    if (en.kjv) h += '<div class="dkjv">KJV: ' + esc(en.kjv) + '</div>';
+  } else {
+    h += '<div style="font-size:14px;color:#7a6040;padding:14px 0">' +
+      (Object.keys(STR).length === 0 ? 'Loading Strong’s dictionary…' : 'Definition for ' + esc(code) + ' not found.') +
+      '</div>';
+  }
+  const hn = !!notes[bid + '|' + ch + '|' + vn];
+  h += '<div class="dnbtn" id="drawer-note-btn">' + (hn ? '✎ Edit' : '✎ Add') + ' note — ' + esc(bookName) + ' ' + ch + ':' + vn + '</div>';
+  $('dcontent').innerHTML = h;
+  $('drawer-note-btn').addEventListener('click', () => { closeDrawer(); openNoteEditor(bid, ch, vn); });
+  $('drawer').classList.add('open');
+  $('dov').classList.add('open');
+}
+
+function closeDrawer() {
+  $('drawer').classList.remove('open');
+  $('dov').classList.remove('open');
+  document.querySelectorAll('.wh.lit,.wg.lit').forEach(el => el.classList.remove('lit'));
+}
+
+// ── NOTE EDITOR ────────────────────────────────────────────────
+function openNoteEditor(bid, ch, v) {
+  closeDrawer();
+  editKey = bid + '|' + ch + '|' + v;
+  const book = bk(bid);
+  $('edref').textContent = (book ? book.n : bid) + ' ' + ch + ':' + v;
+  const cd = VC[bid] && VC[bid][String(ch)];
+  const quote = cd && cd[String(v)] ? cd[String(v)].map(t => t.w || '').filter(Boolean).join(' ') : '';
+  $('edq').textContent = quote ? '“' + quote + '”' : '';
+  $('nota').value = notes[editKey] ? notes[editKey].body : '';
+  $('neditor').classList.add('open');
+  setTimeout(() => $('nota').focus(), 320);
+}
+
+function closeNoteEditor() { $('neditor').classList.remove('open'); editKey = null; }
+
+function saveNote() {
+  const body = $('nota').value.trim();
+  if (!editKey) return;
+  const parts = editKey.split('|');
+  const bid = parts[0], ch = parts[1], v = parts[2];
+  const book = bk(bid);
+  const cd = VC[bid] && VC[bid][ch];
+  const quote = cd && cd[v] ? cd[v].map(t => t.w || '').filter(Boolean).join(' ') : '';
+  if (body) {
+    notes[editKey] = { key:editKey, bookId:bid, ch:+ch, v:+v,
+      ref: (book?book.n:bid) + ' ' + ch + ':' + v, quote, body, updated: Date.now() };
+  } else {
+    delete notes[editKey];
+  }
+  saveNotes();
+  closeNoteEditor();
+  const vn_el = document.querySelector('#vrow-' + v + ' .vn');
+  if (vn_el) vn_el.classList.toggle('hn', !!body);
+}
+
+// ── NOTES LIST ─────────────────────────────────────────────────
+function renderNotes() {
+  const list = $('nscroll');
+  const sorted = Object.values(notes).sort((a,b) => b.updated - a.updated);
+  if (!sorted.length) {
+    list.innerHTML = '<div class="nempty">No notes yet.<br><br>Tap any verse number while reading<br>to add a study note.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  sorted.forEach(n => {
+    const d = new Date(n.updated).toLocaleDateString(undefined, {month:'short',day:'numeric',year:'numeric'});
+    const div = document.createElement('div');
+    div.className = 'nc';
+    div.innerHTML = '<div class="nch" data-bid="' + n.bookId + '" data-ch="' + n.ch + '" data-v="' + n.v + '">' +
+      '<span class="nref">&#128204; ' + esc(n.ref) + '</span>' +
+      '<span class="ndate">' + d + '</span>' +
+      '<button class="ndel" data-key="' + esc(n.key) + '">&times;</button></div>' +
+      (n.quote ? '<div class="nq">“' + esc(n.quote.slice(0,120)) + (n.quote.length>120?'…':'') + '”</div>' : '') +
+      '<div class="nbody" data-bid="' + n.bookId + '" data-ch="' + n.ch + '" data-v="' + n.v + '">' + esc(n.body) + '</div>';
+    list.appendChild(div);
+  });
+}
+
+// ── EXPORTS ────────────────────────────────────────────────────
+function bOrd(bid) { return BOOKS.findIndex(b => b.id === bid); }
+function sortedNotes() {
+  return Object.values(notes).sort((a,b) => {
+    const d = bOrd(a.bookId) - bOrd(b.bookId);
+    return d || a.ch - b.ch || a.v - b.v;
+  });
+}
+
+function expTxt() {
+  const s = sortedNotes();
+  if (!s.length) { alert('No notes to export'); return; }
+  let o = 'STRONGS BIBLE — STUDY NOTES
+American Standard Version
+
+';
+  let lb = null;
+  s.forEach(n => {
+    if (n.bookId !== lb) { o += '
+── ' + (bk(n.bookId)?bk(n.bookId).n:n.bookId).toUpperCase() + ' ──
+
+'; lb = n.bookId; }
+    o += n.ref + '
+“' + n.quote + '”
+
+' + n.body + '
+
+' + '─'.repeat(26) + '
+
+';
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([o], {type:'text/plain;charset=utf-8'}));
+  a.download = 'notes-' + iso() + '.txt';
+  a.click(); URL.revokeObjectURL(a.href);
+}
+
+function expPdf() {
+  const s = sortedNotes();
+  if (!s.length) { alert('No notes to export'); return; }
+  const dt = new Date().toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  let nh = '', lb = null;
+  s.forEach(n => {
+    if (n.bookId !== lb) { nh += '<div class="bkh">' + esc(bk(n.bookId)?bk(n.bookId).n:n.bookId) + '</div>'; lb = n.bookId; }
+    nh += '<div class="nc2"><div class="nr">' + esc(n.ref) + '</div>' +
+      (n.quote ? '<div class="nqt">“' + esc(n.quote) + '”</div>' : '') +
+      '<div class="nb2">' + esc(n.body).replace(/\n/g,'<br>') + '</div></div>';
+  });
+  const w = window.open('','_blank');
+  if (!w) { alert('Allow popups to export PDF'); return; }
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Notes</title><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Lora,Georgia,serif;background:#f5ead6;color:#2a1f0e}.pg{max-width:680px;margin:0 auto;padding:48px}.cv{text-align:center;padding:40px 0 36px;border-bottom:3px solid #2a1f0e;margin-bottom:36px}.cv h1{font-family:Cinzel,serif;font-size:26px;color:#2a1f0e;letter-spacing:.1em}.cv .sub{font-size:14px;color:#7a6040;margin-top:6px}.cv .dt{font-size:12px;color:#a89070;margin-top:10px}.cv .cnt{display:inline-block;margin-top:14px;padding:6px 16px;background:#2a1f0e;color:#d4aa50;border-radius:20px;font-family:Cinzel,serif;font-size:11px}.bkh{font-family:Cinzel,serif;font-size:11px;color:#8b1a1a;letter-spacing:.16em;text-transform:uppercase;margin:30px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(139,26,26,.25)}.nc2{margin-bottom:20px;padding:18px 20px;background:#fff;border:1px solid #e4d4b0;border-radius:8px;border-left:4px solid #8b1a1a;page-break-inside:avoid}.nr{font-family:Cinzel,serif;font-size:12px;color:#2a1f0e;letter-spacing:.07em;margin-bottom:8px;font-weight:600}.nqt{font-size:13px;color:#7a6040;font-style:italic;margin-bottom:11px;padding:8px 12px;background:#f5ead6;border-radius:4px;line-height:1.55}.nb2{font-size:16px;line-height:1.75;white-space:pre-wrap}@media print{body{background:#fff}.pg{padding:0;max-width:100%}.nc2{break-inside:avoid}}</style></head><body><div class="pg"><div class="cv"><div style="font-size:40px;margin-bottom:14px">&#10011;</div><h1>Study Notes</h1><div class="sub">Strongs Bible &middot; American Standard Version</div><div class="dt">' + dt + '</div><div class="cnt">' + s.length + ' ' + (s.length===1?'Note':'Notes') + '</div></div>' + nh + '</div><script>window.onload=function(){window.print()}<\/script></body></html>');
+  w.document.close();
+}
+
+// ── SEARCH ─────────────────────────────────────────────────────
+let searchTimer = null;
+function doSearch(q) {
+  const r = $('sresults');
+  if (!q || q.length < 2) { r.innerHTML = '<div class="sempty">Type to search loaded books</div>'; return; }
+  const ql = q.toLowerCase(), hits = [];
+  Object.entries(VC).forEach(([bid, chs]) => {
+    const book = bk(bid);
+    Object.entries(chs).forEach(([ch, vv]) => {
+      Object.entries(vv).forEach(([v, toks]) => {
+        const txt = toks.map(t => t.w||'').join(' ');
+        if (txt.toLowerCase().includes(ql)) hits.push({bid, ch:+ch, v:+v, book, txt});
       });
     });
-    setHits(results.slice(0, 40));
-  }, [searchQ]);
-
-  const noteKey = (bid, ch, v) => `${bid}|${ch}|${v}`;
-  const hasNote = (bid, ch, v) => !!notes[noteKey(bid, ch, v)];
-
-  const openNote = (bid, ch, v) => {
-    const toks = VERSES_DATA[bid]?.[String(ch)]?.[String(v)] || [];
-    const quote = toks.map(t => t.w || "").filter(Boolean).join(" ");
-    const bk = BOOKS.find(b => b.id === bid);
-    setNoteText(notes[noteKey(bid,ch,v)]?.body || "");
-    setNoteEd({ bid, ch, v, quote, bk });
-    setDrawer(null);
-  };
-
-  const saveNote = () => {
-    if (!noteEd) return;
-    const { bid, ch, v, quote, bk } = noteEd;
-    const key = noteKey(bid, ch, v);
-    const updated = { ...notes };
-    if (noteText.trim()) {
-      updated[key] = { key, bookId:bid, ch:+ch, v:+v,
-        ref:`${bk?.n} ${ch}:${v}`, quote, body:noteText.trim(), updated:Date.now() };
-    } else { delete updated[key]; }
-    saveNotes(updated);
-    setNoteEd(null);
-  };
-
-  // Verse word component
-  const Word = ({ tok, bid, ch, vn }) => {
-    if (!tok.w) return tok.p ? <span>{tok.p} </span> : null;
-    if (!tok.s) return <span style={{ fontFamily:"Georgia,serif" }}>{tok.w}{tok.p || ""} </span>;
-    const isH = tok.s.startsWith("H");
-    const show = isH ? showH : showG;
-    const clr = isH ? C.heb : C.grk;
-    return (
-      <span style={{ fontFamily:"Georgia,serif" }}>
-        <span onClick={() => {
-          const entry = STRONGS_DATA[tok.s] || null;
-          setDrawer({ word:tok.w, code:tok.s, entry, bid, ch, vn });
-        }} style={{
-          cursor:"pointer",
-          borderBottom: show ? `2px solid ${clr}` : "2px solid transparent",
-          color: show ? clr : C.ink,
-          borderRadius:2, padding:"0 1px",
-          transition:"background 0.1s"
-        }}>
-          {tok.w}
-        </span>
-        {showNums && show && (
-          <sup onClick={() => setDrawer({ word:tok.w, code:tok.s, entry:STRONGS_DATA[tok.s]||null, bid, ch, vn })}
-            style={{ fontFamily:"monospace", fontSize:8, opacity:0.65, cursor:"pointer", color:clr, marginLeft:1 }}>
-            {tok.s}
-          </sup>
-        )}
-        {tok.p || ""}{" "}
-      </span>
-    );
-  };
-
-  // Panel slide style
-  const panelStyle = (id) => ({
-    position:"fixed", inset:0, background:C.parch, zIndex:50,
-    display:"flex", flexDirection:"column",
-    transform: panel === id ? "translateX(0)" : id === "books" ? "translateX(-100%)" : "translateX(100%)",
-    transition:"transform 0.28s cubic-bezier(0.4,0,0.2,1)"
   });
-
-  const navBtnStyle = {
-    minWidth:44, height:44, border:"none", background:"transparent",
-    color:C.ink4, cursor:"pointer", borderRadius:8,
-    display:"flex", alignItems:"center", justifyContent:"center", padding:"0 10px"
-  };
-
-  return (
-    <div style={{ display:"flex", flexDirection:"column", height:"100vh", background:C.parch, overflow:"hidden", fontFamily:"Georgia,'Times New Roman',serif" }}>
-
-      {/* ── TOP NAV ── */}
-      <div style={{ display:"flex", alignItems:"center", background:C.ink, borderBottom:`2px solid ${C.gold}`, padding:"0 6px", height:52, flexShrink:0, gap:2 }}>
-        <button style={navBtnStyle} onClick={() => setPanel("books")}>
-          <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="1.8" strokeLinecap="round">
-            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
-        <div style={{ flex:1, textAlign:"center", fontSize:13, letterSpacing:"0.1em", color:C.gold, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis", textTransform:"uppercase" }}>
-          {cBook && cCh ? `${cBook.n.toUpperCase()} · ${cCh}` : "— TAP ☰ TO BEGIN —"}
-        </div>
-        <button style={navBtnStyle} onClick={() => setTab("search")}>
-          <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="1.8" strokeLinecap="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-        </button>
-      </div>
-
-      {/* ── TOOLBAR (read tab only) ── */}
-      {tab === "read" && (
-        <div style={{ display:"flex", alignItems:"center", padding:"0 14px", background:C.parch2, height:40, flexShrink:0, borderBottom:`1px solid ${C.parch3}`, gap:8 }}>
-          <span style={{ fontSize:11, color:C.heb, marginRight:4 }}>H</span>
-          <Toggle checked={showH} onChange={e => setShowH(e.target.checked)} color={C.heb} />
-          <span style={{ fontSize:11, color:C.grk, marginLeft:8, marginRight:4 }}>G</span>
-          <Toggle checked={showG} onChange={e => setShowG(e.target.checked)} color={C.grk} />
-          <span style={{ width:1, height:18, background:C.parch3, margin:"0 8px" }} />
-          <span style={{ fontSize:11, color:C.ink3, marginRight:4 }}>Nums</span>
-          <Toggle checked={showNums} onChange={e => setShowNums(e.target.checked)} color={C.gold} />
-          <div style={{ display:"flex", gap:4, marginLeft:"auto" }}>
-            {[["A−",-1],["A+",1]].map(([l,d]) => (
-              <button key={l} onClick={() => setFz(f => Math.max(14,Math.min(28,f+d)))}
-                style={{ width:30, height:28, border:`1.5px solid ${C.parch3}`, background:C.parch, color:C.ink3, borderRadius:6, cursor:"pointer", fontSize:11 }}>{l}</button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ── MAIN CONTENT ── */}
-      <div style={{ flex:1, overflow:"hidden", position:"relative" }}>
-
-        {/* READ */}
-        {tab === "read" && (
-          <div style={{ position:"absolute", inset:0, overflowY:"auto", background:C.parch }}>
-            {!verses || verses === "loading" ? (
-              <div style={{ textAlign:"center", padding:"52px 24px", color:C.ink3 }}>
-                <div style={{ fontSize:42, marginBottom:14, opacity:0.35 }}>✝</div>
-                <div style={{ fontSize:16, color:C.ink2, marginBottom:12, fontWeight:600 }}>Welcome to Strongs Bible</div>
-                <div style={{ fontSize:15, lineHeight:1.75 }}>
-                  Tap <strong>☰</strong> to choose a book.<br/><br/>
-                  <span style={{ color:C.heb, fontWeight:600 }}>Amber underline</span> = Hebrew (OT)<br/>
-                  <span style={{ color:C.grk, fontWeight:600 }}>Blue underline</span> = Greek (NT)<br/><br/>
-                  Tap any coloured word → Strong's definition.<br/>
-                  <span style={{ color:C.teal, fontWeight:600 }}>Tap a verse number</span> → add a study note.<br/><br/>
-                  <span style={{ fontSize:13, color:C.ink4 }}>
-                    {strongsLoaded 
-                      ? "✓ Full Strong's dictionary loaded (14,298 entries)"
-                      : strongsError 
-                        ? "⚠ Could not load Strong's — check your internet connection"
-                        : "Loading Strong's dictionary…"}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div style={{ padding:"20px 0 60px" }}>
-                {/* Chapter header */}
-                <div style={{ textAlign:"center", margin:"0 16px 24px", paddingBottom:18, borderBottom:`2px solid ${C.parch3}`, position:"relative" }}>
-                  <div style={{ fontSize:10, color:C.crimson, letterSpacing:"0.18em", textTransform:"uppercase", marginBottom:6 }}>{cBook.n}</div>
-                  <div style={{ fontSize:38, color:C.ink, lineHeight:1, fontWeight:600 }}>{cCh}</div>
-                  <div style={{ display:"flex", justifyContent:"center", gap:10, marginTop:12 }}>
-                    {cCh > 1 && (
-                      <button onClick={() => loadCh(verses.bid, cCh-1)}
-                        style={{ fontSize:11, color:C.ink3, background:C.parch2, border:`1.5px solid ${C.parch3}`, borderRadius:6, padding:"6px 14px", cursor:"pointer" }}>
-                        ‹ {cCh-1}
-                      </button>
-                    )}
-                    {cCh < cBook.ch && (
-                      <button onClick={() => loadCh(verses.bid, cCh+1)}
-                        style={{ fontSize:11, color:C.ink3, background:C.parch2, border:`1.5px solid ${C.parch3}`, borderRadius:6, padding:"6px 14px", cursor:"pointer" }}>
-                        {cCh+1} ›
-                      </button>
-                    )}
-                  </div>
-                  <div style={{ position:"absolute", bottom:-2, left:"50%", transform:"translateX(-50%)", width:40, height:2, background:C.gold }} />
-                </div>
-
-                {/* Verses */}
-                {Object.keys(verses.data).map(Number).sort((a,b)=>a-b).map(vn => (
-                  <div key={vn} id={`vrow-${vn}`} style={{ display:"flex", marginBottom:1 }}>
-                    {/* Verse number — full-height tap target */}
-                    <div onClick={() => openNote(verses.bid, verses.ch, vn)}
-                      style={{
-                        minWidth:52, padding:"14px 8px 14px 14px",
-                        fontSize:11, fontWeight:600, flexShrink:0,
-                        textAlign:"right", cursor:"pointer", userSelect:"none",
-                        display:"flex", alignItems:"flex-start", justifyContent:"flex-end", paddingTop:16,
-                        borderLeft: hasNote(verses.bid, verses.ch, vn) ? `3px solid ${C.teal}` : "3px solid transparent",
-                        color: hasNote(verses.bid, verses.ch, vn) ? C.teal : C.crimson,
-                        transition:"all 0.12s"
-                      }}>
-                      {vn}
-                    </div>
-                    {/* Verse text */}
-                    <div style={{ fontSize:fz, lineHeight:1.82, color:C.ink, flex:1, padding:"10px 18px 10px 6px", wordBreak:"break-word" }}>
-                      {verses.data[String(vn)].map((tok, i) => (
-                        <Word key={i} tok={tok} bid={verses.bid} ch={verses.ch} vn={vn} />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* NOTES */}
-        {tab === "notes" && (
-          <div style={{ position:"absolute", inset:0, overflowY:"auto", background:C.parch }}>
-            <div style={{ display:"flex", alignItems:"center", gap:8, padding:"12px 14px", background:C.parch2, borderBottom:`1px solid ${C.parch3}` }}>
-              <span style={{ fontSize:14, color:C.ink2, flex:1, letterSpacing:"0.07em" }}>Study Notes</span>
-              <button onClick={() => {
-                const sorted = Object.values(notes).sort((a,b) => {
-                  const bi = id => BOOKS.findIndex(b=>b.id===id);
-                  return bi(a.bookId)-bi(b.bookId)||a.ch-b.ch||a.v-b.v;
-                });
-                let o = "STRONGS BIBLE — STUDY NOTES\nAmerican Standard Version\n\n";
-                let lb = null;
-                sorted.forEach(n => {
-                  if (n.bookId !== lb) { o += `\n── ${(BOOKS.find(b=>b.id===n.bookId)?.n||n.bookId).toUpperCase()} ──\n\n`; lb = n.bookId; }
-                  o += `${n.ref}\n"${n.quote}"\n\n${n.body}\n\n${"-".repeat(26)}\n\n`;
-                });
-                const a = document.createElement("a");
-                a.href = URL.createObjectURL(new Blob([o], { type:"text/plain" }));
-                a.download = `notes-${new Date().toISOString().slice(0,10)}.txt`;
-                a.click(); URL.revokeObjectURL(a.href);
-              }} style={{ padding:"7px 12px", border:`1.5px solid ${C.parch3}`, borderRadius:8, background:C.parch, color:C.ink3, fontSize:12, cursor:"pointer" }}>
-                Export .txt
-              </button>
-            </div>
-            {Object.keys(notes).length === 0 ? (
-              <div style={{ padding:"60px 24px", textAlign:"center", color:C.ink3, fontSize:15, lineHeight:1.8, fontStyle:"italic" }}>
-                No notes yet.<br/>Tap any verse number while reading<br/>to add a study note.
-              </div>
-            ) : (
-              <div style={{ padding:"12px 0" }}>
-                {Object.values(notes).sort((a,b)=>b.updated-a.updated).map(n => (
-                  <div key={n.key} style={{ margin:"0 14px 12px", background:"#fff", border:`1px solid ${C.parch3}`, borderRadius:10, overflow:"hidden", boxShadow:"0 2px 8px rgba(0,0,0,0.06)" }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:8, padding:"10px 14px", background:C.ink, cursor:"pointer" }}
-                      onClick={() => { loadCh(n.bookId, n.ch); setTab("read"); setTimeout(() => document.getElementById(`vrow-${n.v}`)?.scrollIntoView({behavior:"smooth",block:"center"}), 600); }}>
-                      <span style={{ fontSize:12, color:C.gold, flex:1, letterSpacing:"0.06em" }}>📌 {n.ref}</span>
-                      <span style={{ fontSize:11, color:C.ink4 }}>{new Date(n.updated).toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"})}</span>
-                      <button onClick={e => { e.stopPropagation(); const u={...notes}; delete u[n.key]; saveNotes(u); }}
-                        style={{ width:28, height:28, border:"none", background:"transparent", color:"rgba(255,255,255,0.3)", fontSize:18, cursor:"pointer" }}>×</button>
-                    </div>
-                    {n.quote && <div style={{ padding:"8px 14px", fontSize:13, color:C.ink3, fontStyle:"italic", borderBottom:`1px solid ${C.parch3}`, lineHeight:1.55, background:C.parch }}>"{n.quote}"</div>}
-                    <div style={{ padding:"12px 14px", fontSize:16, lineHeight:1.7, color:C.ink2, whiteSpace:"pre-wrap", cursor:"pointer" }}
-                      onClick={() => openNote(n.bookId, n.ch, n.v)}>{n.body}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* SEARCH */}
-        {tab === "search" && (
-          <div style={{ position:"absolute", inset:0, overflowY:"auto", background:C.parch }}>
-            <div style={{ padding:"10px 14px", background:C.parch2, borderBottom:`1px solid ${C.parch3}` }}>
-              <input value={searchQ} onChange={e => setSearchQ(e.target.value)} placeholder="Search verses…"
-                autoFocus
-                style={{ width:"100%", padding:"10px 14px", background:C.parch, border:`1.5px solid ${C.parch3}`, borderRadius:10, color:C.ink, fontFamily:"Georgia,serif", fontSize:17, outline:"none", boxSizing:"border-box" }} />
-            </div>
-            {hits.length === 0 && searchQ.length < 2 && (
-              <div style={{ padding:"40px 24px", textAlign:"center", color:C.ink3, fontSize:15, fontStyle:"italic" }}>Type to search loaded books</div>
-            )}
-            {hits.length === 0 && searchQ.length >= 2 && (
-              <div style={{ padding:"40px 24px", textAlign:"center", color:C.ink3, fontSize:15 }}>No results found</div>
-            )}
-            {hits.map((h,i) => (
-              <div key={i} onClick={() => { loadCh(h.bid, h.ch); setTimeout(() => document.getElementById(`vrow-${h.v}`)?.scrollIntoView({behavior:"smooth",block:"center"}), 600); }}
-                style={{ padding:"14px 16px", borderBottom:`1px solid ${C.parch3}`, cursor:"pointer" }}>
-                <div style={{ fontSize:10, color:C.crimson, letterSpacing:"0.09em", textTransform:"uppercase", marginBottom:4 }}>{h.bk?.n} {h.ch}:{h.v}</div>
-                <div style={{ fontSize:15, lineHeight:1.55, color:C.ink2 }}>{h.txt.slice(0,140)}</div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* ── TAB BAR ── */}
-      <div style={{ display:"flex", background:C.ink, borderTop:`2px solid ${C.gold}`, flexShrink:0 }}>
-        {[
-          ["read","Read", <svg key="r" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="1.7" strokeLinecap="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>],
-          ["notes","Notes", <svg key="n" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="1.7" strokeLinecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>],
-          ["search","Search", <svg key="s" width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth="1.7" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>]
-        ].map(([id, lbl, icon]) => (
-          <button key={id} onClick={() => setTab(id)} style={{
-            flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center",
-            padding:"10px 0 7px", border:"none", background:"transparent",
-            color: tab === id ? C.gold : "rgba(255,255,255,0.3)",
-            cursor:"pointer", fontSize:9, letterSpacing:"0.09em", textTransform:"uppercase",
-            minHeight:52, gap:4, position:"relative"
-          }}>
-            {icon}{lbl}
-            {id === "notes" && Object.keys(notes).length > 0 && (
-              <span style={{ width:5, height:5, borderRadius:"50%", background:C.teal, position:"absolute", top:8, right:"calc(50% - 16px)" }} />
-            )}
-          </button>
-        ))}
-      </div>
-
-      {/* ── BOOK PANEL ── */}
-      <div style={panelStyle("books")}>
-        <div style={{ display:"flex", alignItems:"center", padding:14, background:C.ink, borderBottom:`2px solid ${C.gold}` }}>
-          <span style={{ fontSize:15, color:C.gold, flex:1, letterSpacing:"0.08em" }}>Books of the Bible</span>
-          <button onClick={() => setPanel(null)} style={{ width:36, height:36, border:"none", background:"transparent", color:C.ink4, fontSize:22, cursor:"pointer" }}>✕</button>
-        </div>
-        <input value={bookQ} onChange={e => setBookQ(e.target.value)} placeholder="Search books…"
-          style={{ margin:"12px 14px", padding:"10px 14px", background:C.parch2, border:`1.5px solid ${C.parch3}`, borderRadius:10, color:C.ink, fontFamily:"Georgia,serif", fontSize:16, outline:"none", width:"calc(100% - 28px)", boxSizing:"border-box" }} />
-        <div style={{ flex:1, overflowY:"auto", paddingBottom:20 }}>
-          {(() => {
-            let lastT = null;
-            return BOOKS.filter(b => !bookQ || b.n.toLowerCase().includes(bookQ.toLowerCase())).flatMap(b => {
-              const items = [];
-              if (b.t !== lastT) {
-                lastT = b.t;
-                items.push(<div key={"h"+b.t} style={{ padding:"8px 14px 4px", fontSize:9, letterSpacing:"0.18em", textTransform:"uppercase", color:C.crimson, fontWeight:600 }}>{b.t==="OT"?"Old Testament":"New Testament"}</div>);
-              }
-              const hasData = !!VERSES_DATA[b.id];
-              items.push(
-                <div key={b.id} onClick={() => { setCBook(b); setPanel("chapters"); }}
-                  style={{ display:"flex", alignItems:"center", padding:"13px 16px", cursor:"pointer", borderBottom:`1px solid ${C.parch3}`, gap:12, minHeight:52, background: cBook?.id===b.id ? C.parch2 : "transparent" }}>
-                  <span style={{ width:26, fontSize:11, color:C.ink4, textAlign:"right" }}>{BOOKS.indexOf(b)+1}</span>
-                  <span style={{ fontSize:18, color: hasData ? C.ink2 : C.ink4, flex:1, fontWeight:500 }}>{b.n}</span>
-                  <span style={{ fontSize:12, color: hasData ? C.crimson : C.ink4 }}>{hasData ? "★ " : ""}{b.ch}ch</span>
-                </div>
-              );
-              return items;
-            });
-          })()}
-        </div>
-      </div>
-
-      {/* ── CHAPTER PANEL ── */}
-      <div style={panelStyle("chapters")}>
-        <div style={{ display:"flex", alignItems:"center", padding:14, background:C.ink, borderBottom:`2px solid ${C.gold}` }}>
-          <button onClick={() => setPanel("books")} style={{ width:44, height:44, border:"none", background:"transparent", color:C.ink4, fontSize:24, cursor:"pointer", display:"flex", alignItems:"center" }}>‹</button>
-          <span style={{ fontSize:15, color:C.gold, flex:1, letterSpacing:"0.08em" }}>{cBook?.n}</span>
-          <button onClick={() => setPanel(null)} style={{ width:36, height:36, border:"none", background:"transparent", color:C.ink4, fontSize:22, cursor:"pointer" }}>✕</button>
-        </div>
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:8, padding:14, overflowY:"auto", flex:1 }}>
-          {cBook && Array.from({length:cBook.ch},(_,i)=>i+1).map(c => {
-            const hasData = !!VERSES_DATA[cBook.id]?.[String(c)];
-            return (
-              <button key={c} onClick={() => loadCh(cBook.id, c)} style={{
-                aspectRatio:"1", border:`1.5px solid ${cCh===c ? C.crimson : hasData ? C.gold : C.parch3}`,
-                background: cCh===c ? C.crimson : C.parch2,
-                borderRadius:10, color: cCh===c ? "#fff" : hasData ? C.gold : C.ink2,
-                fontSize:15, cursor:"pointer", fontFamily:"Georgia,serif", minHeight:44
-              }}>{c}</button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* ── STRONGS DRAWER OVERLAY ── */}
-      <div onClick={() => setDrawer(null)} style={{
-        position:"fixed", inset:0, background:"rgba(20,10,0,0.55)", zIndex:80,
-        opacity: drawer ? 1 : 0, pointerEvents: drawer ? "all" : "none", transition:"opacity 0.2s"
-      }} />
-
-      {/* ── STRONGS DRAWER ── */}
-      <div style={{
-        position:"fixed", bottom:0, left:0, right:0, background:C.parch,
-        borderRadius:"20px 20px 0 0", borderTop:`2px solid ${C.gold}`,
-        zIndex:81, maxHeight:"72vh",
-        transform: drawer ? "translateY(0)" : "translateY(100%)",
-        transition:"transform 0.28s cubic-bezier(0.4,0,0.2,1)",
-        display:"flex", flexDirection:"column",
-        boxShadow:"0 -8px 40px rgba(0,0,0,0.25)"
-      }}>
-        <div style={{ width:40, height:4, background:C.parch3, borderRadius:2, margin:"12px auto 0", flexShrink:0 }} />
-        {drawer && (
-          <div style={{ flex:1, overflowY:"auto", padding:"14px 20px 24px" }}>
-            {/* Tag */}
-            <span style={{
-              display:"inline-block", fontFamily:"monospace", fontSize:11, padding:"3px 10px",
-              borderRadius:6, marginBottom:10, fontWeight:500,
-              background: drawer.code.startsWith("H") ? "rgba(155,68,0,0.12)" : "rgba(26,74,122,0.1)",
-              color: drawer.code.startsWith("H") ? C.heb : C.grk,
-              border: `1px solid ${drawer.code.startsWith("H") ? "rgba(155,68,0,0.2)" : "rgba(26,74,122,0.2)"}`
-            }}>
-              {drawer.code} · {drawer.code.startsWith("H") ? "Hebrew" : "Greek"}
-            </span>
-            <div style={{ fontFamily:"Georgia,serif", fontSize:26, color:C.ink, marginBottom:4, fontStyle:"italic", fontWeight:500 }}>
-              "{drawer.word}"
-            </div>
-            {drawer.entry ? (<>
-              {drawer.entry.lemma && <div style={{ fontSize:30, marginBottom:4, lineHeight:1.15, color:C.gold }}>{drawer.entry.lemma}</div>}
-              {drawer.entry.xlit && <div style={{ fontFamily:"monospace", fontSize:12, color:C.ink3, marginBottom:2 }}>{drawer.entry.xlit}</div>}
-              {drawer.entry.pron && <div style={{ fontSize:13, color:C.teal, marginBottom:8, fontStyle:"italic" }}>/{drawer.entry.pron}/</div>}
-              {drawer.entry.pos && (
-                <div style={{ display:"inline-block", fontSize:10, letterSpacing:"0.09em", textTransform:"uppercase", background:C.parch2, color:C.ink3, padding:"3px 9px", borderRadius:4, marginBottom:12, border:`1px solid ${C.parch3}` }}>
-                  {drawer.entry.pos}
-                </div>
-              )}
-              <div style={{ height:1, background:C.parch3, margin:"10px 0" }} />
-              <div style={{ fontSize:9, letterSpacing:"0.15em", textTransform:"uppercase", color:C.crimson, marginBottom:5, fontWeight:600 }}>Definition</div>
-              <div style={{ fontSize:17, lineHeight:1.65, color:C.ink2 }}>{drawer.entry.definition}</div>
-              {drawer.entry.kjv && (
-                <div style={{ fontSize:13, color:C.ink3, marginTop:8, fontStyle:"italic", paddingTop:8, borderTop:`1px solid ${C.parch3}` }}>
-                  KJV: {drawer.entry.kjv}
-                </div>
-              )}
-            </>) : (
-              <div style={{ fontSize:14, color:C.ink3, padding:"14px 0" }}>
-                {!strongsLoaded 
-                  ? "Loading Strong's dictionary…" 
-                  : `Definition for ${drawer.code} not found.`}
-              </div>
-            )}
-            {/* Add note button */}
-            <div onClick={() => openNote(drawer.bid, drawer.ch, drawer.vn)}
-              style={{ display:"flex", alignItems:"center", gap:8, marginTop:16, padding:"12px 14px", background:C.parch2, border:`1.5px solid ${C.parch3}`, borderRadius:10, cursor:"pointer", color:C.ink3, fontSize:14 }}>
-              ✎ {hasNote(drawer.bid, drawer.ch, drawer.vn) ? "Edit" : "Add"} note — {BOOKS.find(b=>b.id===drawer.bid)?.n} {drawer.ch}:{drawer.vn}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* ── NOTE EDITOR ── */}
-      <div style={{
-        position:"fixed", inset:0, background:C.parch, zIndex:60,
-        display:"flex", flexDirection:"column",
-        transform: noteEd ? "translateY(0)" : "translateY(100%)",
-        transition:"transform 0.28s cubic-bezier(0.4,0,0.2,1)"
-      }}>
-        <div style={{ display:"flex", alignItems:"center", gap:10, padding:13, background:C.ink, borderBottom:`2px solid ${C.gold}`, flexShrink:0 }}>
-          <button onClick={() => setNoteEd(null)} style={{ width:44, height:44, border:"none", background:"transparent", color:C.ink4, fontSize:20, cursor:"pointer" }}>✕</button>
-          <span style={{ fontSize:14, color:C.gold, flex:1, letterSpacing:"0.08em" }}>
-            {noteEd && `${noteEd.bk?.n} ${noteEd.ch}:${noteEd.v}`}
-          </span>
-          <button onClick={saveNote} style={{ padding:"8px 20px", border:"none", background:C.crimson, color:"#fff", borderRadius:8, fontSize:13, cursor:"pointer", letterSpacing:"0.06em" }}>
-            Save
-          </button>
-        </div>
-        {noteEd?.quote && (
-          <div style={{ padding:"10px 16px", background:C.parch2, borderBottom:`1px solid ${C.parch3}`, fontSize:14, color:C.ink3, fontStyle:"italic", lineHeight:1.55, flexShrink:0 }}>
-            "{noteEd.quote}"
-          </div>
-        )}
-        <textarea value={noteText} onChange={e => setNoteText(e.target.value)}
-          placeholder="Study notes, cross-references, observations, prayer…"
-          autoFocus={!!noteEd}
-          style={{ flex:1, padding:16, background:C.parch, border:"none", outline:"none", color:C.ink, fontFamily:"Georgia,serif", fontSize:18, lineHeight:1.75, resize:"none" }} />
-      </div>
-
-    </div>
-  );
+  if (!hits.length) { r.innerHTML = '<div class="sempty">No results in loaded books</div>'; return; }
+  const qr = new RegExp(q.replace(/[.*+?^${}()|[\]\]/g,'\$&'), 'gi');
+  r.innerHTML = '';
+  hits.slice(0,60).forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'sr';
+    div.innerHTML = '<div class="sref">' + esc(h.book?h.book.n:h.bid) + ' ' + h.ch + ':' + h.v + '</div>' +
+      '<div class="stxt">' + esc(h.txt).replace(qr, m => '<strong style="color:#d4aa50">' + m + '</strong>') + '</div>';
+    div.addEventListener('click', () => {
+      loadCh(h.bid, h.ch);
+      setTimeout(() => { const el = $('vrow-' + h.v); if (el) el.scrollIntoView({behavior:'smooth',block:'center'}); }, 600);
+    });
+    r.appendChild(div);
+  });
 }
 
+// ── FONT SIZE ──────────────────────────────────────────────────
+function chFz(d) {
+  fz = Math.max(14, Math.min(28, fz + d));
+  document.querySelectorAll('.vt').forEach(el => el.style.fontSize = fz + 'px');
+  localStorage.setItem('fz', fz);
+}
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(React.createElement(StrongsBible));
+// ── EVENT WIRING ───────────────────────────────────────────────
+$('btn-books').onclick = () => { buildBookList(''); openPanel('bpanel'); };
+$('btn-search-tab').onclick = () => showTab('search');
+$('btn-close-books').onclick = () => closePanel('bpanel');
+$('btn-back-ch').onclick = () => { closePanel('cpanel'); buildBookList(''); openPanel('bpanel'); };
+$('btn-close-ch').onclick = () => closePanel('cpanel');
+$('btn-close-ed').onclick = closeNoteEditor;
+$('btn-save-note').onclick = saveNote;
+$('btn-exp-txt').onclick = expTxt;
+$('btn-exp-pdf').onclick = expPdf;
+$('fz-dn').onclick = () => chFz(-1);
+$('fz-up').onclick = () => chFz(1);
+$('dov').onclick = closeDrawer;
+$('bsearch').oninput = e => buildBookList(e.target.value);
+
+$('tab-read').onclick = () => showTab('reader');
+$('tab-notes').onclick = () => { showTab('notes'); renderNotes(); };
+$('tab-search').onclick = () => showTab('search');
+$('sinput').oninput = e => { clearTimeout(searchTimer); searchTimer = setTimeout(() => doSearch(e.target.value), 300); };
+$('tH').onchange = $('tG').onchange = $('tN').onchange = applyDisplay;
+
+// Book list clicks
+$('blist').addEventListener('click', e => {
+  const bi = e.target.closest('.bi');
+  if (bi) { cBook = bk(bi.dataset.bid); buildChGrid(); closePanel('bpanel'); openPanel('cpanel'); }
+});
+
+// Chapter grid clicks
+$('cgrid').addEventListener('click', e => {
+  const cb = e.target.closest('.cb');
+  if (cb) loadCh(cBook.id, +cb.dataset.ch);
+});
+
+// Reader clicks (verse numbers + words + chapter nav)
+$('reader').addEventListener('click', e => {
+  const el = e.target;
+  // Verse number
+  const vn = el.closest('.vn');
+  if (vn && vn.dataset.bid) { openNoteEditor(vn.dataset.bid, +vn.dataset.ch, +vn.dataset.v); return; }
+  // Tagged word or number badge
+  if (el.dataset.s && el.dataset.bid) {
+    showStrongs(el.dataset.word || el.textContent, el.dataset.s, el.dataset.bid, +el.dataset.ch, +el.dataset.vn);
+    return;
+  }
+  // Chapter nav buttons
+  const nb = el.closest('.chnb');
+  if (nb && nb.dataset.bid) loadCh(nb.dataset.bid, +nb.dataset.ch);
+});
+
+// Notes list clicks
+$('nscroll').addEventListener('click', e => {
+  const del = e.target.closest('.ndel');
+  if (del) { e.stopPropagation(); delete notes[del.dataset.key]; saveNotes(); renderNotes(); return; }
+  const hdr = e.target.closest('.nch');
+  if (hdr && hdr.dataset.bid) {
+    loadCh(hdr.dataset.bid, +hdr.dataset.ch);
+    setTimeout(() => { const el = $('vrow-' + hdr.dataset.v); if (el) el.scrollIntoView({behavior:'smooth',block:'center'}); }, 600);
+    return;
+  }
+  const body = e.target.closest('.nbody');
+  if (body && body.dataset.bid) openNoteEditor(body.dataset.bid, +body.dataset.ch, +body.dataset.v);
+});
+
+// Swipe drawer to close
+let ty0 = 0;
+$('drawer').addEventListener('touchstart', e => { ty0 = e.touches[0].clientY; }, {passive:true});
+$('drawer').addEventListener('touchend', e => { if (e.changedTouches[0].clientY - ty0 > 70) closeDrawer(); }, {passive:true});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeDrawer(); closePanel('bpanel'); closePanel('cpanel'); closeNoteEditor(); }
+});
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+updateDot();
+loadStrongs(); // load full dictionary in background
+const last = JSON.parse(localStorage.getItem('lastPos') || 'null');
+if (last) loadCh(last.b, last.c);
 </script>
 </body>
 </html>
